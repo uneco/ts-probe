@@ -1,6 +1,8 @@
 ts-probe
 ========
 
+Tool to probe type information using TypeScript Compiler API
+
 # Usage
 
 look these files:  

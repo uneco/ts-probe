@@ -28,5 +28,5 @@
   "keywords": ["TypeScript", "Compiler API"],
   "author": "uneco <aoki@u-ne.co>",
   "license": "MIT",
-  "description": ""
+  "description": "Tool to probe type information using TypeScript Compiler API"
 }
