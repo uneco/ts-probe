@@ -7,8 +7,8 @@ Tool to probe type information using TypeScript Compiler API
 
 look these files:  
 
-- [Test](./tests/index.test.ts)
-- [Types](./lib/index.d.ts)
+- [Test](https://github.com/uneco/ts-probe/blob/master/tests/index.test.ts)
+- [Types](https://github.com/uneco/ts-probe/blob/master/lib/index.d.ts)
 
 # License
 
