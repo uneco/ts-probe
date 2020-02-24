@@ -3,6 +3,10 @@ ts-probe
 
 Tool to probe type information using TypeScript Compiler API
 
+# Examples
+
+https://runkit.com/uneco/ts-probe-example
+
 # Usage
 
 look these files:  

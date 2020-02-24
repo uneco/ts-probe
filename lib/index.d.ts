@@ -1,2 +1,10 @@
 import * as ts from 'typescript';
-export declare function probe(checkerOrProgram: ts.TypeChecker | ts.Program, source: ts.SourceFile, text: string): ts.Type | undefined;
+declare type ProbeOptions = {
+    program: ts.Program;
+    source: ts.SourceFile;
+    typeText: string;
+    extractInterface?: boolean;
+    compilerOptions?: ts.CompilerOptions;
+};
+export declare function probe(options: ProbeOptions): ts.Type | undefined;
+export {};
