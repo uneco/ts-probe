@@ -1,4 +1,4 @@
-import ts from 'typescript'
+import * as ts from 'typescript'
 import { probe } from '../src/index'
 
 describe('pass program', () => {

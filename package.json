@@ -1,7 +1,8 @@
 {
   "name": "ts-probe",
-  "version": "0.0.2",
-  "main": "src/index.ts",
+  "version": "0.0.3",
+  "main": "lib/index.js",
+  "type": "lib/index.d.ts",
   "scripts": {
     "test": "jest",
     "build": "tsc -p tsconfig.build.json",
