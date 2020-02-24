@@ -1,23 +1,66 @@
 import * as ts from 'typescript'
 
 const ProbeTypeIdentifier = '__ProbeType'
+const ProbeTypeCheckIdentifier = '__ProbeTypeCheck'
 
-export function probe (checkerOrProgram: ts.TypeChecker | ts.Program, source: ts.SourceFile, text: string): ts.Type | undefined {
-  const checker = ('getTypeChecker' in checkerOrProgram) ? checkerOrProgram.getTypeChecker() : checkerOrProgram
-  const printer = ts.createPrinter()
+type ProbeOptions = {
+  program: ts.Program;
+  source: ts.SourceFile;
+  typeText: string;
+  extractInterface?: boolean;
+  compilerOptions?: ts.CompilerOptions;
+}
 
-  const sourceText = printer.printNode(ts.EmitHint.SourceFile, source, source)
+function typeCheckDecralation (extractInterface: boolean): string {
+  if (extractInterface) {
+    return `type ${ProbeTypeCheckIdentifier} = { [P in keyof ${ProbeTypeIdentifier}]: ${ProbeTypeIdentifier}[P] }`
+  }
+
+  return `type ${ProbeTypeCheckIdentifier} = ${ProbeTypeIdentifier}`
+}
+
+export function probe (options: ProbeOptions): ts.Type | undefined {
+  const sourceText = options.source.getText()
   const injectedSourceText = [
     sourceText,
-    `type ${ProbeTypeIdentifier} = ${text}`,
+    `type ${ProbeTypeIdentifier} = ${options.typeText}`,
+    typeCheckDecralation(Boolean(options.extractInterface)),
   ].join('\n\n')
 
-  const probeSource = ts.createSourceFile(source.fileName, injectedSourceText, source.languageVersion, true)
+  const probeSource = ts.createSourceFile(
+    options.source.fileName,
+    injectedSourceText,
+    options.source.languageVersion,
+    true,
+  )
+
+  const defaultCompilerHost = ts.createCompilerHost(options.compilerOptions ?? {})
+
+  const customCompilerHost = {
+    ...(defaultCompilerHost),
+    getSourceFile (filename: string): ts.SourceFile | undefined {
+      if (filename === options.source.fileName) {
+        return probeSource
+      }
+
+      return defaultCompilerHost.getSourceFile(filename, options.source.languageVersion)
+    },
+  }
+
+  const fileNames = options.program.getRootFileNames()
+  const customProgram = ts.createProgram(
+    fileNames,
+    options.program.getCompilerOptions(),
+    customCompilerHost,
+    options.program,
+  )
+  const checker = customProgram.getTypeChecker()
+
   const probeSourceNode = probeSource.getChildAt(0, probeSource)
 
   const probeTypeDeclaration = probeSourceNode.getChildren(probeSource).find((node) => {
     if (ts.isTypeAliasDeclaration(node)) {
-      return node.name.text === ProbeTypeIdentifier
+      return node.name.text === ProbeTypeCheckIdentifier
     }
 
     return false

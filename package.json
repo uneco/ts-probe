@@ -1,6 +1,6 @@
 {
   "name": "ts-probe",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "type": "lib/index.d.ts",
   "scripts": {
@@ -25,6 +25,9 @@
     "jest": "^25.1.0",
     "ts-jest": "^25.2.1",
     "ts-node": "^8.6.2"
+  },
+  "engines": {
+    "node": ">=10"
   },
   "keywords": ["TypeScript", "Compiler API"],
   "author": "uneco <aoki@u-ne.co>",
