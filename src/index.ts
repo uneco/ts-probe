@@ -11,7 +11,7 @@ type ProbeOptions = {
   compilerOptions?: ts.CompilerOptions;
 }
 
-function typeCheckDecralation (extractInterface: boolean): string {
+function typeCheckDeclaration (extractInterface: boolean): string {
   if (extractInterface) {
     return `type ${ProbeTypeCheckIdentifier} = { [P in keyof ${ProbeTypeIdentifier}]: ${ProbeTypeIdentifier}[P] }`
   }
@@ -24,7 +24,7 @@ export function probe (options: ProbeOptions): ts.Type | undefined {
   const injectedSourceText = [
     sourceText,
     `type ${ProbeTypeIdentifier} = ${options.typeText}`,
-    typeCheckDecralation(Boolean(options.extractInterface)),
+    typeCheckDeclaration(Boolean(options.extractInterface)),
   ].join('\n\n')
 
   const probeSource = ts.createSourceFile(
